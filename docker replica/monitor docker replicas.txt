@@ -1,0 +1,25 @@
+There are several open-source tools available for monitoring Docker instances. These tools can help you track container performance, resource usage, health checks, and more. Here are some popular open-source solutions:
+
+Prometheus:
+
+Prometheus is a leading open-source monitoring and alerting toolkit. It's highly flexible and can monitor various aspects of your Docker containers.
+You can install Prometheus and use it to scrape metrics from Docker using exporters like the Node Exporter, cAdvisor, etc.
+Grafana can be used in conjunction with Prometheus to visualize the collected data.
+cAdvisor (Container Advisor):
+
+cAdvisor is an open-source container monitoring tool that automatically collects, aggregates, processes, and exports information about running containers.
+It provides information about resource usage and performance characteristics of containers.
+Grafana:
+
+Grafana, although not a monitoring tool itself, can be integrated with various data sources, including Prometheus and InfluxDB, and it's excellent for visualizing metrics in dashboards.
+Netdata:
+
+Netdata is another powerful, open-source, real-time performance monitoring tool for systems and containers.
+It provides detailed insights into metrics, including CPU, memory, disk, network, and more.
+Here's a simple example of using Prometheus and Grafana to monitor Docker containers:
+
+Set up Prometheus to scrape metrics from Docker containers using exporters like cAdvisor.
+Configure Grafana to connect with Prometheus as a data source and create dashboards to visualize container metrics.
+For a more comprehensive monitoring system, you might want to consider combining multiple tools. For example, Prometheus for metrics collection, Grafana for visualization, and maybe cAdvisor for specific container-level details.
+
+The installation and configuration steps for each tool are specific and can be a bit involved. However, each of these tools has extensive documentation available on their respective websites, which provides detailed instructions on installation, configuration, and integration.

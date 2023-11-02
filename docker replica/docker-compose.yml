@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  graphql:
+    build: ./path/to/graphql-service  # Replace with the path to your GraphQL service directory
+    ports:
+      - "4000"  # Expose the GraphQL service port
+    restart: always  # Automatically restart the container if it stops
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:your_container_port"]  # Health check to monitor container health
+      interval: 10s  # Interval between health checks
+      retries: 3  # Number of retries before considering the container unhealthy
+
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"  # Expose NGINX on port 80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Mount NGINX configuration file
+
+networks:
+  default:
+    external:
+      name: bridge

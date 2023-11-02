@@ -1,0 +1,96 @@
+Dockerfile
+---------------
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD [ "node", "server.js" ]
+
+docker build -t task-api-image .
+
+
+VUe container
+---------------
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 80
+CMD [ "serve", "-s", "dist", "-p", "80" ]
+docker build -t task-vue-app-image .
+
+
+---------------
+
+version: '3'
+services:
+  api:
+    build:
+      context: ./api # Path to your Node.js API application's Dockerfile
+    ports:
+      - "3000:3000" # Map the API container's port to the host machine
+    depends_on:
+      - db # Ensure the API container starts after the database container
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/yourdatabase # Replace with your PostgreSQL connection URL
+    networks:
+      - app-network
+  db:
+    image: postgres:13 # Use the official PostgreSQL image
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: yourdatabase
+    ports:
+      - "5432:5432" # Map the PostgreSQL container's port to the host machine
+    volumes:
+      - pg-data:/var/lib/postgresql/data # Persist database data
+    networks:
+      - app-network
+networks:
+  app-network:
+volumes:
+  pg-data:
+  
+ --------------- 
+version: '3.7'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  task-api:
+    build:
+      context: ./task-api # The path to your Node.js API application
+    container_name: task-api-container
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@postgres:5432/mydb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  vue-app:
+    build:
+      context: ./vue-app # The path to your Vue.js application
+    container_name: vue-app-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - task-api
+
+volumes:
+  postgres-data:
+
